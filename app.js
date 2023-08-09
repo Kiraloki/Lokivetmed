@@ -17,26 +17,28 @@ app.use(cookieParser());
 app.use(express.json());
 
 //Route Imports
-const user = require("./routes/userRoutes");
-const animalType = require("./routes/categories/animalTypeRoutes");
-const treatmentType = require("./routes/categories/treatmentTypeRoute");
+// const user = require("./routes/userRoutes");
+// const animalType = require("./routes/categories/animalTypeRoutes");
+// const treatmentType = require("./routes/categories/treatmentTypeRoute");
 // const product = require("./routes/productsRoute");
-const essential = require("./routes/categories/dailyEssentialRoutes");
-const medical = require("./routes/categories/medicalCareRoute");
+// const essential = require("./routes/categories/dailyEssentialRoutes");
+// const medical = require("./routes/categories/medicalCareRoute");
 // const order = require("./routes/orderRoutes");
 // const varieties = require("./routes/varietyRoutes");
 // const contactUs = require("./routes/contactUsRoutes");
 // const healthCheck = require("./routes/healthCheckRoutes");
 // const rfq = require("./routes/rfqRoutes");
 // const search = require("./routes/searchQueryRoutes");
+const category = require("./routes/categoryRoutes");
 const ErrorHandler = require("./utils/appError");
 
-app.use("/api/v1/user", user);
-app.use("/api/v1/animal", animalType);
-app.use("/api/v1/treatment", treatmentType);
-// app.use("/api/v1", product);
-app.use("/api/v1/essential", essential);
-app.use("/api/v1/medical", medical);
+// app.use("/api/v1/user", user);
+// app.use("/api/v1/animal", animalType);
+// app.use("/api/v1/treatment", treatmentType);
+// app.use("/api/v1/essential", essential);
+// app.use("/api/v1/medical", medical);
+app.use("/api/v1/category", category);
+
 // app.use("/api/v1", order);
 // app.use("/api/v1", varieties);
 // app.use("/api/v1", contactUs);

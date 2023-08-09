@@ -43,7 +43,7 @@ exports.signup = catchAsyncError(async (req, res, next) => {
     passwordConfirm: req.body.passwordConfirm,
   });
 
-  const url = `${req.protocol}://${req.get("host")}/me`;
+  // const url = `${req.protocol}://${req.get("host")}/me`;
   // console.log(url);
   // await new sendEmail(newUser, url).sendWelcome();
 
@@ -181,11 +181,19 @@ exports.forgotPassword = catchAsyncError(async (req, res, next) => {
     const resetURL = `${req.protocol}://${req.get(
       "host"
     )}/api/v1/users/resetPassword/${resetToken}`;
+
+    const message = `Click on the Link to change your Password :- \n\n ${resetURL} \n\n If you have not requested this email then please ignore it.`;
+
     // await new sendEmail(user, resetURL).sendPasswordReset();
+    await sendEmail({
+      email: user.email,
+      subject: `Password Recovery`,
+      message,
+    });
 
     res.status(200).json({
-      status: "success",
-      message: "Token sent to email!",
+      success: true,
+      message: `Email sent to ${user.email} successfully`,
       resetToken,
     });
   } catch (err) {
