@@ -31,7 +31,7 @@ exports.createCategory = catchAsyncErrors(async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+}); 
 
 //get all  category types
 exports.allCategoryTypes = catchAsyncErrors(async (req, res, next) => {

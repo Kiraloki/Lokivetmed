@@ -1,5 +1,5 @@
 const catchAsyncError = require("../utils/catchAsyncError");
-const Product = require("../models/productModel");
+const Product = require("../models/myProductModel");
 const ErrorHandler = require("../utils/appError");
 const logger = require("../utils/logger");
 
@@ -41,8 +41,8 @@ exports.createProduct = catchAsyncError(async (req, res, next) => {
  */
 
 //single product detail
-exports.getProductDetails = catchAsyncError(async (req, res, next) => {
-  const product = await Product.findById(req.params.id);
+exports.getProductbyid = catchAsyncError(async (req, res, next) => {
+  const product = await Product.findById(req.params.productid);
 
   if (!product) {
     return next(new ErrorHandler("product Not found", 404));
@@ -54,6 +54,21 @@ exports.getProductDetails = catchAsyncError(async (req, res, next) => {
   });
 
   logger.info("single product detail");
+});
+
+exports.getProductbySubcatid = catchAsyncError(async (req, res, next) => {
+  const ProductT = await Product.find({
+    "categories.subcategoryid": req.params.subcategoryid,
+  });
+
+  if (!ProductT) {
+    return next(new ErrorHandler("product Not found", 404));
+  }
+
+  res.status(200).json({
+    success: true,
+    ProductT,
+  });
 });
 
 /**

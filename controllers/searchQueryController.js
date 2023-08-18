@@ -24,3 +24,10 @@ exports.createSearchQuery = catchAsyncErrors(async (req, res, next) => {
     next(error);
   }
 });
+
+exports.getAllSearchQueries = catchAsyncErrors(async (req, res, next) => {
+  const searchQueryT = await SearchQuery.find();
+  res.status(200).json({ success: true, searchQueryT });
+});
+
+// get single search query

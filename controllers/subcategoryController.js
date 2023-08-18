@@ -42,9 +42,14 @@ exports.createSubCategory = catchAsyncErrors(async (req, res, next) => {
 
 //get all sub category types
 exports.allSubCategoryTypes = catchAsyncErrors(async (req, res, next) => {
+  // const Category = await Category.find({ categoryName: req.query.category });
   const subCategoryT = await SubCategory.find({
     category: req.params.categoryid,
   });
+
+  console.log(req.params);
+
+  console.log(req.query.categoryid);
   res.status(200).json({
     success: true,
     subCategoryT,

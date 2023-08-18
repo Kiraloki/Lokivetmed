@@ -20,7 +20,7 @@ app.use(express.json());
 // const user = require("./routes/userRoutes");
 // const animalType = require("./routes/categories/animalTypeRoutes");
 // const treatmentType = require("./routes/categories/treatmentTypeRoute");
-// const product = require("./routes/productsRoute");
+const product = require("./routes/productsRoute");
 // const essential = require("./routes/categories/dailyEssentialRoutes");
 // const medical = require("./routes/categories/medicalCareRoute");
 // const order = require("./routes/orderRoutes");
@@ -38,6 +38,7 @@ const ErrorHandler = require("./utils/appError");
 // app.use("/api/v1/essential", essential);
 // app.use("/api/v1/medical", medical);
 app.use("/api/v1/category", category);
+app.use("/api/v1/product", product);
 
 // app.use("/api/v1", order);
 // app.use("/api/v1", varieties);
