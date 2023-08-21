@@ -40,6 +40,15 @@ exports.createProduct = catchAsyncError(async (req, res, next) => {
  * @throws {Error} - If the product is not found.
  */
 
+// get all products
+exports.getAllProducts = catchAsyncError(async (req, res, next) => {
+  const products = await Product.find();
+  res.status(200).json({
+    success: true,
+    products,
+  });
+});
+
 //single product detail
 exports.getProductbyid = catchAsyncError(async (req, res, next) => {
   const product = await Product.findById(req.params.productid);

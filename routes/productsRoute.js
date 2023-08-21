@@ -16,6 +16,7 @@ const router = express.Router();
 
 //products routes
 // router.get("/:productid", productController.getProductbyid);
+router.get("/", productController.getAllProducts);
 router.get("/:subcategoryid", productController.getProductbySubcatid);
 router.get("/one/:productid", productController.getProductbyid);
 
