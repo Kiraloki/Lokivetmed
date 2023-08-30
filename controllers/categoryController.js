@@ -1,4 +1,5 @@
 const Category = require("../models/categoryModel");
+const SubCategory = require("../models/subCategoryModel");
 const catchAsyncErrors = require("./../utils/catchAsyncError");
 
 //Create New category
@@ -8,8 +9,10 @@ exports.createCategory = catchAsyncErrors(async (req, res, next) => {
 
     // Check if the categoryName already exists in the database (case-insensitive)
     const existingCategory = await Category.findOne({
-      CategoryName: { $regex: new RegExp(`^${categoryName}$`, "i") },
+      categoryName: { $regex: new RegExp(`^${categoryName}$`, "i") },
     });
+
+    // console.log(existingCategory);
 
     if (existingCategory) {
       return res.status(400).json({
@@ -31,7 +34,7 @@ exports.createCategory = catchAsyncErrors(async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}); 
+});
 
 //get all  category types
 exports.allCategoryTypes = catchAsyncErrors(async (req, res, next) => {
@@ -71,3 +74,27 @@ exports.deleteCategoryType = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.getCatsAndSubcats = catchAsyncErrors(async (req, res, next) => {
+  const AllCategory = await Category.find();
+  const AllSubcategory = await SubCategory.find();
+  const result = AllCategory.map((category) => {
+    const subcategoriesForCategory = AllSubcategory.filter(
+      (subcategory) => subcategory.category == category.id
+    ).map((subcategory) => ({
+      id: subcategory._id,
+      name: subcategory.subCategoryName,
+    }));
+
+    return {
+      id: category._id,
+      name: category.categoryName,
+      subcategories: subcategoriesForCategory,
+    };
+  });
+
+  res.status(200).json({
+    success: true,
+    result: result,
+  });
+});

@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
+const authController = require("./../controllers/authController");
 
 const contactUsController = require("../controllers/contactUsController");
 
-// Import catchAsyncErrors
-const catchAsyncErrors = require("../middleware/catchAsyncError");
-
 // POST request to create a new contact
-router.post("/contact", catchAsyncErrors(contactUsController.createContact));
-
+router.post("/", contactUsController.createContact);
+router.use(authController.protect);
+router.use(authController.restrictTo("admin"));
+router.get("/", contactUsController.getAllContactUsInfo);
 module.exports = router;

@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const authController = require("./../controllers/authController");
 
 const searchController = require("../controllers/searchQueryController");
-const catchAsyncErrors = require("../middleware/catchAsyncError");
-router.post("/search", catchAsyncErrors(searchController.createSearchQuery));
-router.get("/");
+router.post("/", searchController.createSearchQuery);
+router.use(authController.protect);
+router.use(authController.restrictTo("admin"));
+router.get("/", searchController.getAllSearchQueries);
 
 module.exports = router;

@@ -1,9 +1,11 @@
 const Order = require("../models/orderModel");
-const Product = require("../models/productModel");
+const Product = require("../models/myProductModel");
 const ErrorHandler = require("../utils/appError");
 const catchAsyncErrors = require("../utils/catchAsyncError");
 const sendEmail = require("../utils/sendEmail");
 const logger = require("../utils/logger");
+const CartItem = require("../models/cartItemModel");
+const factory = require("./../controllers/handleFactory");
 
 /**
  * function: This function is used to create a new order.
@@ -21,14 +23,29 @@ const logger = require("../utils/logger");
  */
 // Create new Order
 exports.newOrder = catchAsyncErrors(async (req, res, next) => {
-  const { shippingInfo, orderItems, billingInfo } = req.body;
+  // const { shippingInfo, orderItems, billingInfo } = req.body;
+  const { shippingInfo, billingInfo } = req.body;
+  let orderItems = [];
+  try {
+    const allCartItems = await CartItem.find({ user: req.user.id });
+
+    for (const item of allCartItems) {
+      orderItems.push({ cartItem: item._id });
+    }
+  } catch (err) {
+    return next(new ErrorHandler(err.message, 500));
+  }
+
+  if (orderItems.length == 0) {
+    return next(new ErrorHandler("Add atleast one item to the cart", 404));
+  }
 
   const order = await Order.create({
     shippingInfo,
     orderItems,
     billingInfo,
     orderedAt: Date.now(),
-    user: req.user._id,
+    user: req.user.id,
   });
 
   // Send email to user with order details
@@ -249,16 +266,16 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
   
   `;
 
-  try {
-    await sendEmail({
-      email: [req.user.email, ""],
-      subject: "Order confirmation VetmedMan",
-      html: message,
-      contentType: "text/html",
-    });
-  } catch (error) {
-    return next(new ErrorHandler(error.message, 500));
-  }
+  // try {
+  //   await sendEmail({
+  //     email: [req.user.email, ""],
+  //     subject: "Order confirmation VetmedMan",
+  //     html: message,
+  //     contentType: "text/html",
+  //   });
+  // } catch (error) {
+  //   return next(new ErrorHandler(error.message, 500));
+  // }
 
   res.status(201).json({
     success: true,
@@ -280,22 +297,24 @@ It uses the Order.findById method to find the order with the specified ID and po
  * @throws {ErrorHandler} - If the order is not found, an error is thrown with status code 404.
  */
 //get Single Order
-exports.getSingleOrder = catchAsyncErrors(async (req, res, next) => {
-  const order = await Order.findById(req.params.id).populate(
-    "user",
-    "name email"
-  );
+// exports.getSingleOrder = catchAsyncErrors(async (req, res, next) => {
+//   const order = await Order.findById(req.params.id).populate(
+//     "user",
+//     "name email"
+//   );
 
-  if (!order) {
-    return next(new ErrorHandler("Order not found with this id", 404));
-  }
+//   if (!order) {
+//     return next(new ErrorHandler("Order not found with this id", 404));
+//   }
 
-  res.status(200).json({
-    success: true,
-    order,
-  });
-  logger.info("Order Detials!");
-});
+//   res.status(200).json({
+//     success: true,
+//     order,
+//   });
+//   logger.info("Order Detials!");
+// });
+
+exports.getSingleOrder = factory.getOne(Order);
 
 /**
  * Get orders of the logged-in user.function: This function retrieves all orders for the logged-in user.
@@ -368,11 +387,11 @@ exports.updateOrderStatus = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler("You have delivered this order", 400));
   }
 
-  order.orderItems.forEach(async (order) => {
-    await updateStock(order.product, order.quantity);
-  });
+  // order.orderItems.forEach(async (order) => {
+  //   await updateStock(order.product, order.quantity);
+  // });
 
-  order.orderStatus = req.body.status;
+  order.orderStatus = req.body.orderStatus;
 
   if (req.body.status === "Delivered") {
     order.deliveredAt = Date.now();
@@ -382,6 +401,7 @@ exports.updateOrderStatus = catchAsyncErrors(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
+    order,
   });
   logger.info("update order status admin");
 });

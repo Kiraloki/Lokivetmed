@@ -1,5 +1,6 @@
 const express = require("express");
 const userController = require("../controllers/userContoller.js");
+const cartController = require("../controllers/cartController.js");
 const authController = require("./../controllers/authController");
 
 const router = express.Router();
@@ -18,6 +19,13 @@ router.patch("/updateMyPassword", authController.updatePassword);
 router.get("/me", userController.getMe, userController.getUser);
 router.patch("/updateMe", userController.updateMe);
 router.delete("/deleteMe", userController.deleteMe);
+router.get("/mycart", cartController.getAllMyCartItems);
+
+router
+  .route("/cart/:id")
+  .get(cartController.getMyCartItem)
+  .patch(cartController.updateCartItem)
+  .delete(cartController.deleteCartItem);
 
 router.use(authController.restrictTo("admin"));
 
@@ -35,31 +43,3 @@ router
 module.exports = router;
 
 ////////////////////////////////////////////////////////////////
-
-// router.route("/register").post(registerUser);
-// router.route("/login").post(loginUser);
-// router.route("/password/forgot").post(forgotPassword);
-// router.route("/password/reset/:token").put(resetPassword);
-// router.route("/me").get(isAuthenticatedUser, getUserDetails);
-
-// router.route("/password/update").put(isAuthenticatedUser, updatePassword);
-// router.route("/me/update").put(isAuthenticatedUser, updateProfile);
-
-// router.route("/me/update").put(isAuthenticatedUser, updateProfile);
-// // router.route('/add-to-cart').post(isAuthenticatedUser, addToCart)
-// // router.route('/cart-items/:id').get(isAuthenticatedUser, getCartItems)
-// // router.delete('/cart/:userId/items/:itemId', removeCartItem);
-
-// router
-//   .route("/admin/users")
-//   .get(isAuthenticatedUser, authorizeRoles("admin"), getAllUser);
-
-// router
-//   .route("/admin/user/:id")
-//   .get(isAuthenticatedUser, authorizeRoles("admin"), getSingleUser)
-//   .put(isAuthenticatedUser, authorizeRoles("admin"), updateUserRole)
-//   .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteUser);
-
-// router.route("/logout").get(logout);
-
-// module.exports = router;

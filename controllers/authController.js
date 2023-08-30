@@ -99,6 +99,7 @@ exports.protect = catchAsyncError(async (req, res, next) => {
 
   // 3) Check if user still exists
   const currentUser = await User.findById(decoded.id);
+  // console.log(currentUser);
   if (!currentUser) {
     return next(
       new AppError(
@@ -118,6 +119,7 @@ exports.protect = catchAsyncError(async (req, res, next) => {
   // GRANT ACCESS TO PROTECTED ROUTE
   req.user = currentUser;
   res.locals.user = currentUser;
+  // console.log(req.user);
   next();
 });
 

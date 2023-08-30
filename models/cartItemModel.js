@@ -8,12 +8,13 @@ const cartItemSchema = mongoose.Schema({
   product: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product",
+    required: true,
   },
   user: {
-    type: ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
 });
 
-module.exports = mongoose.model("CartItem", orderItemSchema);
+module.exports = mongoose.model("CartItem", cartItemSchema);

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const searchQuerySchema = new mongoose.Schema({
-  query: String,
+  query: { type: String, required: true },
   timestamp: { type: Date, default: Date.now },
 });
 

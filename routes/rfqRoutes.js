@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
-
 const rfqController = require("../controllers/rfqController");
-const catchAsyncErrors = require("../middleware/catchAsyncError");
+const authController = require("../controllers/authController");
 
-router.post("/rfq", catchAsyncErrors(rfqController.createRFQ));
+router.post("/", rfqController.createRFQ);
+router.use(authController.protect);
+router.use(authController.restrictTo("admin"));
+router.get("/", rfqController.getAllRFQs);
 
 module.exports = router;

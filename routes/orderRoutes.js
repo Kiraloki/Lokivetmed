@@ -1,18 +1,21 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { isAuthenticatedUser, authorizeRoles } = require('../middleware/auth');
-const { newOrder, getSingleOrder, myOrders, getAllOrders, updateOrderStatus, deleteOrder } = require('../controllers/orderControllers');
+const authController = require("./../controllers/authController");
+const orderControllers = require("./../controllers/orderControllers");
 
-router.route("/order/new").post(isAuthenticatedUser, newOrder)
-router.route("/order/:id").get(isAuthenticatedUser, getSingleOrder)
-router.route("/myorders").get(isAuthenticatedUser, myOrders)
+router.use(authController.protect);
 
-router.route("/admin/orders").get(isAuthenticatedUser, authorizeRoles('admin'),getAllOrders)
+router.route("/new").post(orderControllers.newOrder);
+router.route("/myorders").get(orderControllers.myOrders);
+router.route("/:id").get(orderControllers.getSingleOrder);
 
+router.use(authController.restrictTo("admin"));
 
-router.route("/admin/order/:id")
-.put(isAuthenticatedUser, authorizeRoles('admin'),updateOrderStatus)
-.delete(isAuthenticatedUser, authorizeRoles('admin'),deleteOrder)
+router.route("/admin/orders").get(orderControllers.getAllOrders);
 
+router
+  .route("/:id")
+  .patch(orderControllers.updateOrderStatus)
+  .delete(orderControllers.deleteOrder);
 
 module.exports = router;
