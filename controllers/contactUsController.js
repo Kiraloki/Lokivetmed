@@ -41,3 +41,5 @@ exports.getAllContactUsInfo = factory.getAll(Contact);
 // });
 
 // get specific contact us info admin
+exports.updateStatus = factory.updateOne(Contact);
+exports.deleteContactUs = factory.deleteOne(Contact);

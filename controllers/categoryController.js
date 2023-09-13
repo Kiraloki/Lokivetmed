@@ -49,10 +49,11 @@ exports.allCategoryTypes = catchAsyncErrors(async (req, res, next) => {
 exports.updateCategoryType = async (req, res, next) => {
   try {
     const categoryT = await Category.findByIdAndUpdate(
-      req.params.type_id,
+      req.params.id,
       req.body,
       { new: true }
     );
+
     res.status(200).json({
       success: true,
       categoryT,
@@ -65,7 +66,7 @@ exports.updateCategoryType = async (req, res, next) => {
 //delete category type
 exports.deleteCategoryType = async (req, res, next) => {
   try {
-    const categoryT = await Category.findByIdAndRemove(req.params.type_id);
+    const categoryT = await Category.findByIdAndRemove(req.params.id);
     res.status(200).json({
       success: true,
       categoryT,
@@ -84,6 +85,7 @@ exports.getCatsAndSubcats = catchAsyncErrors(async (req, res, next) => {
     ).map((subcategory) => ({
       id: subcategory._id,
       name: subcategory.subCategoryName,
+      imageUrl: subcategory.imageUrl,
     }));
 
     return {

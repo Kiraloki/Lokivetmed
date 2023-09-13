@@ -1,4 +1,5 @@
 const SearchQuery = require("../models/searchQueryModel");
+const catchAsyncError = require("../utils/catchAsyncError");
 const factory = require("./handleFactory");
 
 // exports.createSearchQuery = catchAsyncErrors(async (req, res, next) => {
@@ -31,7 +32,21 @@ exports.createSearchQuery = factory.createOne(SearchQuery);
 //   res.status(200).json({ success: true, searchQueryT });
 // });
 
-exports.getAllSearchQueries = factory.getAll(SearchQuery);
+exports.getAllSearchQueries = catchAsyncError(async (req, res, next) => {
+  const results = await SearchQuery.aggregate([
+    {
+      $group: {
+        _id: { $toLower: "$query" },
+        count: { $sum: 1 },
+      },
+    },
+    {
+      $sort: { count: -1 },
+    },
+  ]);
+
+  res.status(200).json({ statusbar: "success", results });
+});
 
 // get single search query
 

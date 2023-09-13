@@ -11,7 +11,7 @@ router.route("/:id").get(orderControllers.getSingleOrder);
 
 router.use(authController.restrictTo("admin"));
 
-router.route("/admin/orders").get(orderControllers.getAllOrders);
+router.route("/admin/all").get(orderControllers.getAllOrders);
 
 router
   .route("/:id")

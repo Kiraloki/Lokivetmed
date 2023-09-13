@@ -18,7 +18,7 @@ router
   .delete(reviewController.deleteReview);
 
 router.use(authController.restrictTo("admin"));
-
+router.get("/", reviewController.getAllReviews);
 router.get(
   "/:productid",
   reviewController.addInfo,

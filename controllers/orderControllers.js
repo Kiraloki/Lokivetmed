@@ -350,7 +350,10 @@ exports.myOrders = catchAsyncErrors(async (req, res, next) => {
 
 //get All orders --Admin
 exports.getAllOrders = catchAsyncErrors(async (req, res, next) => {
-  const orders = await Order.find();
+  const orders = await Order.find().populate({
+    path: "user",
+    select: ["name", "email"],
+  });
 
   let totalAmount = 0;
 

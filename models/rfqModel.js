@@ -11,6 +11,18 @@ const rfqSchema = new mongoose.Schema({
   endUser: { type: String, required: true },
   additional: { type: String, required: true },
   address: { type: String, required: true },
+  status: {
+    type: String,
+    required: true,
+    default: "Under Review",
+    enum: [
+      "Under Review",
+      "Completed",
+      "Rejected",
+      "On Hold",
+      "Quotation Sent",
+    ],
+  },
 });
 
 module.exports = mongoose.model("RFQ", rfqSchema);

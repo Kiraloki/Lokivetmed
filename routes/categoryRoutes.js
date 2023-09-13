@@ -12,6 +12,10 @@ router.use(authController.protect);
 
 router.use(authController.restrictTo("admin"));
 
-router.use("/", categoryController.createCategory);
+router.post("/", categoryController.createCategory);
+router
+  .route("/:id")
+  .patch(categoryController.updateCategoryType)
+  .delete(categoryController.deleteCategoryType);
 
 module.exports = router;

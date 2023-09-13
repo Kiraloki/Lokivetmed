@@ -24,6 +24,7 @@ exports.getmyReviewForProduct = catchAsyncErrors(async (req, res, next) => {
 exports.createReview = factory.createOne(Review);
 exports.updateReview = factory.updateOne(Review);
 exports.deleteReview = factory.deleteOne(Review);
+exports.getAllReviews = factory.getAll(Review);
 
 exports.getAllReviewsForProduct = catchAsyncErrors(async (req, res, next) => {
   const result = await Review.find({

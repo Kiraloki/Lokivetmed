@@ -9,4 +9,8 @@ router.post("/", contactUsController.createContact);
 router.use(authController.protect);
 router.use(authController.restrictTo("admin"));
 router.get("/", contactUsController.getAllContactUsInfo);
+router
+  .route("/:id")
+  .patch(contactUsController.updateStatus)
+  .delete(contactUsController.deleteContactUs);
 module.exports = router;
